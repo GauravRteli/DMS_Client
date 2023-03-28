@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
-import { Occupaation } from "../utils/Occupation";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import axios from "axios";
 import Skills from "../components/Skills";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { validateEmail } from "../utils/validations";
@@ -14,7 +8,7 @@ import { validateName } from "../utils/validations";
 import { validatePhoneNo } from "../utils/validations";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [name, setName] = useState("");
@@ -62,13 +56,38 @@ const RegistrationScreen = () => {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (
       validateEmail(email) &&
       validateName(name) &&
       validatePhoneNo(phoneNo) &&
       date !== ""
     ) {
+      if (password == confirmPassword) {
+        const skillsarray = talent.skills;
+        try{
+          const data = await axios.post("http://192.168.0.102:5000/appuserregistration", {
+            name: name,
+            email: email,
+            phoneNo: phoneNo,
+            dateOfBirth: date,
+            skills: skillsarray,
+            password: password,
+          });
+          if(data.status == 200){
+            navigation.navigate('Login');
+          }else{
+            alert(data.data.message);
+          }
+        }catch(err){
+          alert("Network Error !");
+        }
+
+      } else {
+        alert("password and confirmpassword are not matching");
+      }
+    } else {
+      alert("Some Entered Fields are invalid");
     }
   };
   return (
