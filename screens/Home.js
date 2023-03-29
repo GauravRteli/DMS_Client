@@ -38,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
         "Delivering exceptional service is not a choice, it's our commitment."
       </Animated.Text>
       <View className="absolute bottom-0 left-0 right-0 flex-row justify-center p-4">
-        <TouchableOpacity className="bg-blue-500 rounded-md py-2 px-4 mr-4" onPress={() => navigation.navigate('Login')} >
+        <TouchableOpacity className="bg-blue-500 rounded-md py-2 px-4 mr-4" onPress={() => navigation.navigate('Login')}>
           <Text className="text-white font-bold">Login</Text>
         </TouchableOpacity>
         <TouchableOpacity className="bg-gray-500 rounded-md py-2 px-4" onPress={() => navigation.navigate('Registration')} >
