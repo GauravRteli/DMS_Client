@@ -66,7 +66,7 @@ const RegistrationScreen = ({ navigation }) => {
       if (password == confirmPassword) {
         const skillsarray = talent.skills;
         try{
-          const data = await axios.post("http://192.168.0.102:5000/appuserregistration", {
+          const data = await axios.post("http://192.168.0.101:5000/appuserregistration", {
             name: name,
             email: email,
             phoneNo: phoneNo,
@@ -80,7 +80,7 @@ const RegistrationScreen = ({ navigation }) => {
             alert(data.data.message);
           }
         }catch(err){
-          alert("Network Error !");
+          alert(err);
         }
 
       } else {

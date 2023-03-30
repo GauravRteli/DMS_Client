@@ -1,22 +1,30 @@
 import React,{ useState } from "react";
+import { View, TextInput, TouchableOpacity, Text } from "react-native";
+
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { View, TextInput, TouchableOpacity, Text } from "react-native";
+
 import axios from 'axios';
-const LoginScreen = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const handleLogin = async () => {;
-    const data = await axios.post("http://192.168.0.102:5000/appuser-login",{
+  const handleLogin = async () => {
+
+    const data = await axios.post("http://192.168.0.101:5000/appuser-login",{
       email,
       password
     });
     if(data.status == 201){
-      setMessage(data?.data?.message);
+      setMessage(data?.data?.message + " !");
     }else{
-      setMessage(data?.data?.message);
+      await AsyncStorage.setItem("userDetails",JSON.stringify(data?.data));
+      navigation.setParams({ userDetails: data?.data });
+      navigation.navigate("Drawer");
     }
+
   }
 
   return (
@@ -35,18 +43,24 @@ const LoginScreen = () => {
           className="bg-white p-3 rounded-lg mb-4"
           placeholder="Email"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => {
+            setEmail(text);
+            setMessage(""); 
+          }}
           autoCapitalize="none"
           keyboardType="email-address"
         />
         <TextInput
-          className="bg-white p-3 rounded-lg mb-4"
+          className="bg-white p-3 rounded-lg mb-2"
           placeholder="Password"
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => {
+            setPassword(text);
+            setMessage(""); 
+          }}
           secureTextEntry={true}
         />
-        <Text>{message}</Text>
+        <Text className="mb-2 text-red-500">{message}</Text>
         <TouchableOpacity
           className="bg-blue-500 p-3 rounded-lg items-center"
           onPress={handleLogin}
