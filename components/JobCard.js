@@ -12,7 +12,7 @@ const JobListing = ({ job, salaryReq, navigation, from }) => {
     const value = await AsyncStorage.getItem("userDetails");
     if(value == null){
       alert("You have to login first !");
-      navigation.navigate("Login");
+      // navigation.navigate("Login");
     }else{
       const user = JSON.parse(value);
       let appliedjobs = user.appliedjob;

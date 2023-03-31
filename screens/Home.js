@@ -1,11 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useRef, useState } from "react";
+import { useIsFocused } from '@react-navigation/native'
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 
 const HomeScreen = ({ navigation }) => {
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [isLogin, setIsLogin] = useState(false);
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     Animated.timing(scaleAnim, {
       toValue: 1,
@@ -26,8 +29,10 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getUserDetails();
-  }, []);
+    if(isFocused){
+      getUserDetails();
+    }
+  }, [isFocused]);
 
   return (
     <View className="flex-1 justify-center p-3 items-center bg-gray-100">

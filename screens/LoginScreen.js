@@ -1,5 +1,6 @@
 import React,{ useState } from "react";
 import { View, TextInput, TouchableOpacity, Text } from "react-native";
+import { IP } from '@env';
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -13,7 +14,7 @@ const LoginScreen = ({navigation}) => {
   const [message, setMessage] = useState("");
   const handleLogin = async () => {
 
-    const data = await axios.post("http://192.168.0.101:5000/appuser-login",{
+    const data = await axios.post(`http://${IP}/appuser-login`,{
       email,
       password
     });

@@ -14,7 +14,7 @@ const JobsAppliedScreen = ({ navigation }) => {
     const value = JSON.parse(await AsyncStorage.getItem("userDetails"));
     if(value == null){
       alert("You have to login first !");
-      navigation.navigate("Login");
+      // navigation.navigate("Login");
     }else{
         setAppliedJobs(value.appliedjob);
     }

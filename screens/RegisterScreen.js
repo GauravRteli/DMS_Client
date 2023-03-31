@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { IP } from '@env';
 import axios from "axios";
 import Skills from "../components/Skills";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -66,7 +67,7 @@ const RegistrationScreen = ({ navigation }) => {
       if (password == confirmPassword) {
         const skillsarray = talent.skills;
         try{
-          const data = await axios.post("http://192.168.0.101:5000/appuserregistration", {
+          const data = await axios.post(`http://${IP}/appuserregistration`, {
             name: name,
             email: email,
             phoneNo: phoneNo,

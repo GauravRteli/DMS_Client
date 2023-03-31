@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-// import CustomItemComponent from "./CustomItemComponent";
+ 
 
 import UserImage from "../assets/user.png";
 
@@ -13,7 +13,6 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// mayurteli91999@hackstack.com
 
 const CustomDrawer = (props) => {
   const [user, setUser] = useState(null);
@@ -35,10 +34,10 @@ const CustomDrawer = (props) => {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    if (isFocused) {
-      getData();
+    
+    useEffect(() => {
+      if (isFocused) {
+        getData();
     }
   }, [isFocused]);
 
@@ -62,6 +61,7 @@ const CustomDrawer = (props) => {
 
       <View>
         <TouchableOpacity
+          disabled={user == null}
           className="p-4 bg-blue-500 rounded-lg m-2"
           onPress={removeUser}
         >

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { IP } from '@env';
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,7 +10,8 @@ import { getUser } from "../utils/getuser";
 
 const JobDetails = ({ route, navigation }) => {
   const { job, applied, from } = route.params;
-
+  const [ applied1,setApplied1 ] = useState(applied);
+  const [color, setColor] = useState("bg-green-600");
   const registerUser = async () => {
     const value = await AsyncStorage.getItem("userDetails");
     if (value == null) {
@@ -29,18 +31,32 @@ const JobDetails = ({ route, navigation }) => {
       if (flag) {
         alert("Already Applied into the job");
       } else {
-        const data = await axios.post(
-          "http://192.168.0.101:5000/user-jobapplication",
-          {
-            user: JSON.parse(value),
-            job_id: job._id,
-          }
-        );
-        let userData = JSON.parse(value);
-        getUser(userData._id);
+        try{
+          const data = await axios.post(
+            `http://${IP}/user-jobapplication`,
+            {
+              user: JSON.parse(value),
+              job_id: job._id,
+            }
+          );
+          setApplied1(true);
+          let userData = JSON.parse(value);
+          getUser(userData._id);
+
+        }catch(e){
+          console.log(e);
+        }
       }
     }
   };
+
+  useEffect(() => {
+    if(applied1){
+      setColor("bg-green-300")
+    }else{
+      setColor("bg-green-600")
+    }
+  },[applied1])
 
   return (
     <View className="flex-column justify-between h-full">
@@ -68,18 +84,14 @@ const JobDetails = ({ route, navigation }) => {
       </ScrollView>
       {from == "jobscreen" ? (
         <TouchableOpacity
-          className={
-            "px-3 mx-1 mb-1 rounded-md" + applied
-              ? "bg-green-300"
-              : "bg-green-500"
-          }
-          disabled={applied}
+          className={`px-3 mx-1 mb-1 py-1 rounded-md ${color}`}
+          disabled={applied1}
           onPress={() => {
             registerUser();
           }}
         >
           <Text className="text-white text-center p-3 font-bold">
-            {!applied ? "Apply" : "Applied"}
+            {!applied1 ? "Apply" : "Applied"}
           </Text>
         </TouchableOpacity>
       ) : (
