@@ -12,6 +12,7 @@ const JobDetails = ({ route, navigation }) => {
   const { job, applied, from } = route.params;
   const [ applied1,setApplied1 ] = useState(applied);
   const [color, setColor] = useState("bg-green-600");
+  
   const registerUser = async () => {
     const value = await AsyncStorage.getItem("userDetails");
     if (value == null) {

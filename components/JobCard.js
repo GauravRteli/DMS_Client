@@ -5,14 +5,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const JobListing = ({ job, salaryReq, navigation, from }) => {
+const JobListing = ({ job, salaryReq, navigation, from, isRecruited }) => {
   
   const CheckUser = async () => {
 
     const value = await AsyncStorage.getItem("userDetails");
     if(value == null){
       alert("You have to login first !");
-      // navigation.navigate("Login");
     }else{
       const user = JSON.parse(value);
       let appliedjobs = user.appliedjob;
@@ -30,10 +29,11 @@ const JobListing = ({ job, salaryReq, navigation, from }) => {
     }
   }
   return (
-    <View className="flex flex-col p-2 mx-1 mt-1 border border-gray-300 rounded-md">
+    <View className={`flex flex-col p-2 mx-1 mt-1 border border-gray-300 rounded-md ${isRecruited} `}>
       <View className="grid grid-cols-4 mb-2">
-        <View className="col-span-1">
+        <View className="col-span-1 flex flex-row justify-between">
           <Text className="font-bold text-lg">{job.jobname}</Text>
+          <Text className="font-bold text-lg text-blue-600" >{(isRecruited != "") && "Recruited"}</Text>
         </View>
         <View className="col-span-3 flex flex-row items-center justify-end">
           <Text className="font-bold mr-2">Salary:</Text>
