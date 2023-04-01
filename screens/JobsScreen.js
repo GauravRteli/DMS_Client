@@ -31,7 +31,7 @@ const JobsScreen = ({ navigation }) => {
         <ScrollView>
             {
                 jobs.map((job,index) => {
-                    return <JobCard key={index} job={job} navigation={navigation} from="jobscreen" />
+                    return <JobCard key={index} jobData={job} navigation={navigation} from="jobscreen" />
                 })
             }
         </ScrollView>

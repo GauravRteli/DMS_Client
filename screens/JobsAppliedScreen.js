@@ -23,7 +23,6 @@ const JobsAppliedScreen = ({ navigation }) => {
 
       await AsyncStorage.setItem("userDetails",JSON.stringify(data?.data));
       value = JSON.parse(await AsyncStorage.getItem("userDetails"));
-      
       if(value.recruitedInJob == null){
         setRecruited(null);
       }else{
@@ -44,12 +43,12 @@ const JobsAppliedScreen = ({ navigation }) => {
 
   return (
     <ScrollView>
-      {appliedJobs.map((job, index) => {
+      {appliedJobs.map((appliedjob, index) => {
         return (
           <JobCard
             key={index}
-            job={job}
-            isRecruited={(recruited == job._id)?"bg-blue-200":""}
+            jobData={appliedjob.job}
+            status={appliedjob.status}
             navigation={navigation}
             from="appliedjob"
           />
