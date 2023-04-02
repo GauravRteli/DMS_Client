@@ -13,7 +13,6 @@ const JobsAppliedScreen = ({ navigation }) => {
   const [recruited, setRecruited] = useState(null);
 
   const isFocused = useIsFocused();
-
   const getJobs = async () => {
     let value = JSON.parse(await AsyncStorage.getItem("userDetails"));
     if(value != null){

@@ -16,6 +16,7 @@ import JobsAppliedScreen from "../screens/JobsAppliedScreen";
 import Notifications from "../screens/NotificationsScreen";
 import OnBoardingScreen from "../screens/OnBoardingScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -55,11 +56,12 @@ export default AppNavigator = () => {
       initialRouteName="Navbar"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="Onboarding" component={OnBoardingScreen} />
+      {/* <Stack.Screen name="Onboarding" component={OnBoardingScreen} /> */}
       <Stack.Screen name="Drawer" component={DrawerNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Registration" component={RegistrationScreen} />
+      <Stack.Screen name="EditProfile" options={{ headerShown: true }} component={EditProfileScreen} />
+      <Stack.Screen name="Registration" options={{ headerShown: true }} component={RegistrationScreen} />
       <Stack.Screen name="JobDetails" component={JobDetails} />
       <Stack.Screen name="ContactUs" component={ContactUs} />
     </Stack.Navigator>

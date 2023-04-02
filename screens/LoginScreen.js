@@ -13,16 +13,20 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const handleLogin = async () => {
-    const data = await axios.post(`http://${IP}/appuser-login`, {
-      email,
-      password,
-    });
-    if (data.status == 201) {
-      setMessage(data?.data?.message + " !");
-    } else {
-      await AsyncStorage.setItem("userDetails", JSON.stringify(data?.data));
-      navigation.setParams({ userDetails: data?.data });
-      navigation.navigate("Drawer");
+    try{
+      const data = await axios.post(`http://${IP}/appuser-login`, {
+        email,
+        password,
+      });
+      if (data.status == 201) {
+        setMessage(data?.data?.message + " !");
+      } else {
+        await AsyncStorage.setItem("userDetails", JSON.stringify(data?.data));
+        navigation.setParams({ userDetails: data?.data });
+        navigation.navigate("Drawer");
+      }
+    }catch(e){
+      console.log(e);
     }
   };
 

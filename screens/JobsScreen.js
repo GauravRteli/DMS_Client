@@ -18,7 +18,6 @@ const JobsScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
-
   const getJobs = async () => {
     setRefreshing(true);
     const data = await axios.get(`http://${IP}/get-jobs`);

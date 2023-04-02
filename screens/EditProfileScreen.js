@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { IP } from "@env";
 import axios from "axios";
 import Skills from "../components/Skills";
@@ -15,9 +16,13 @@ import { validateEmail } from "../utils/validations";
 import { validateName } from "../utils/validations";
 import { validatePhoneNo } from "../utils/validations";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const RegistrationScreen = ({ navigation }) => {
+const EditProfile = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const [email, setEmail] = useState("");
+  const [workerId,setWorkerId] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [name, setName] = useState("");
   const [isValidName, setIsValidName] = useState(true);
@@ -26,6 +31,7 @@ const RegistrationScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [date, setDate] = useState(new Date());
+  const [bio, setBio] = useState("");
   const [show, setShow] = useState(false);
   const [talent, setTalent] = useState({ skills: new Array() });
   const [skillField, setSkillField] = useState("");
@@ -80,53 +86,77 @@ const RegistrationScreen = ({ navigation }) => {
     setSkillField("");
   };
 
-  const handleRegister = async () => {
+  const handleEdit = async () => {
     if (
       validateEmail(email) &&
       validateName(name) &&
       validatePhoneNo(phoneNo) &&
       date !== ""
     ) {
-      if (password == confirmPassword) {
-        const skillsarray = talent.skills;
-        try {
-          const data = await axios.post(`http://${IP}/appuserregistration`, {
-            name: name,
-            sex: selectedValue,
-            email: email,
-            phoneNo: phoneNo,
-            dateOfBirth: date,
-            skills: skillsarray,
-            password: password
-          });
-          if (data.status == 200) {
-            resetForm();
-            navigation.navigate("Login");
-          } else {
-            alert(data.data.message);
-          }
-        } catch (err) {
-          alert(err);
+      const skillsarray = talent.skills;
+      console.log(bio);
+      try {
+        const data = await axios.post(`http://${IP}/edit-appuser`, {
+            workerId: workerId,
+          name: name,
+          sex: selectedValue,
+          email: email,
+          phoneNo: phoneNo,
+          dateOfBirth: date,
+          bio: bio,
+          skills: skillsarray,
+          password: password,
+        });
+        console.log(data);
+        if (data.status == 200) {
+          await AsyncStorage.setItem("userDetails",JSON.stringify(data?.data));
+          navigation.navigate("Profile");
+        } else {
+          alert(data.data.message);
         }
-      } else {
-        alert("password and confirmpassword are not matching");
+      } catch (err) {
+        alert(err);
       }
     } else {
       alert("Some Entered Fields are invalid");
     }
   };
+
+  const setProfileData = async () => {
+    const value = JSON.parse(await AsyncStorage.getItem("userDetails"));
+    if (value != null) {
+        setWorkerId(value?._id);
+      setName(value?.name);
+      setSelectedValue(value?.sex);
+      setEmail(value?.email);
+      setPhoneNo(value?.phoneNo);
+      setTalent({ ...talent,["skills"]: value?.skills });
+      setBio(value?.bio);
+      setDate(new Date(value?.dateOfBirth));
+    } else {
+      alert("You Have to login first !");
+      navigation.navigate("Login");
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      setProfileData();
+    }
+  }, [isFocused]);
+
   return (
     <ScrollView>
-      <View className="flex-1 mt-5 bg-slate-100 justify-center items-center">
-        <View className="flex-row items-center self-stretch justify-center gap-3">
-          <Text className="text-4xl font-bold text-gray-800">Register</Text>
-          <FontAwesome5
-            name="user-lock"
-            size={24}
-            color="black"
-            className="animate-spin"
-          />
-        </View>
+      <View className="flex-1 bg-slate-100 justify-center items-center">
+        {/* <View className="flex-row items-center self-stretch justify-center gap-3">
+        <Text className="text-4xl font-bold text-gray-800">Edit Profile</Text>
+        <FontAwesome5
+          name="user-lock"
+          size={24}
+          color="black"
+          className="animate-spin"
+        />
+      </View> */}
         <View className="w-11/12 px-5 py-8 shadow-lg shadow-slate-400/100">
           <TextInput
             className={`bg-white p-3 rounded-lg ${
@@ -239,7 +269,7 @@ const RegistrationScreen = ({ navigation }) => {
           </View>
 
           <View className="flex-row flex-wrap p-2 mt-4 bg-white rounded-sm">
-            {talent?.skills.map((skillName, index) => {
+            {talent?.skills?.map((skillName, index) => {
               return (
                 <Skills
                   key={index}
@@ -251,7 +281,6 @@ const RegistrationScreen = ({ navigation }) => {
           </View>
           <View className="my-4 flex-row items-end justify-between">
             <TextInput
-              // className="h-12 border-gray-300 border-b-2 w-3/5 text-lg"
               className="bg-white p-3 h-12 w-2/3 rounded-lg"
               placeholder="Add skill"
               value={skillField}
@@ -284,28 +313,22 @@ const RegistrationScreen = ({ navigation }) => {
           ) : (
             <></>
           )}
-
+          <Text>Bio :</Text>
           <TextInput
-            className="bg-white p-3 rounded-lg mb-4"
-            placeholder="Password"
-            style={{ zIndex: 0 }}
-            secureTextEntry
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-          />
-          <TextInput
-            className="bg-white p-3 rounded-lg mb-4"
-            placeholder="Confirm Password"
-            secureTextEntry
-            onChangeText={(text) => setConfirmPassword(text)}
-            value={confirmPassword}
+            editable
+            multiline
+            numberOfLines={4}
+            className="bg-white p-3 rounded-lg my-4"
+            placeholder="Bio ...."
+            onChangeText={(text) => setBio(text)}
+            value={bio}
           />
           <TouchableOpacity
             className="bg-blue-500 py-3 rounded-md"
-            onPress={handleRegister}
+            onPress={handleEdit}
           >
             <Text className="text-white text-lg font-bold text-center">
-              Register
+              Edit Profile
             </Text>
           </TouchableOpacity>
         </View>
@@ -314,4 +337,4 @@ const RegistrationScreen = ({ navigation }) => {
   );
 };
 
-export default RegistrationScreen;
+export default EditProfile;

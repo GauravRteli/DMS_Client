@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
+import { IP } from '@env';
 
 import AppNavigator from './Navigator/AppNavigator';
 
@@ -15,6 +16,11 @@ const Drawer = createDrawerNavigator();
 
 
 export default function App() {
+ 
+  useEffect(() => {
+    console.log(IP);
+  },[])
+
   return (
     <NavigationContainer>
       <AppNavigator />
