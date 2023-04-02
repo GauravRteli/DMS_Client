@@ -97,7 +97,7 @@ const RegistrationScreen = ({ navigation }) => {
             phoneNo: phoneNo,
             dateOfBirth: date,
             skills: skillsarray,
-            password: password
+            password: password,
           });
           if (data.status == 200) {
             resetForm();

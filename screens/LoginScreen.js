@@ -14,6 +14,7 @@ const LoginScreen = ({ navigation }) => {
   const [message, setMessage] = useState("");
   const handleLogin = async () => {
     try{
+      console.log(IP);
       const data = await axios.post(`http://${IP}/appuser-login`, {
         email,
         password,
