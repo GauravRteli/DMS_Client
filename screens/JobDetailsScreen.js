@@ -63,7 +63,7 @@ const JobDetails = ({ route, navigation }) => {
     <View className="flex-column justify-between h-full">
       <ScrollView className="p-4">
         <Text
-          className="font-bold text-3xl text-center pt-10 pb-3 mb-2"
+          className="font-bold text-3xl text-center pt-0 pb-3 mb-2"
           style={{ borderBottomWidth: 1, borderBottomColor: "grey" }}
         >
           {jobData.jobname}

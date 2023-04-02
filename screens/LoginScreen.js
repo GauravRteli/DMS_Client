@@ -1,32 +1,30 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text } from "react-native";
-import { IP } from '@env';
+import { IP } from "@env";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const handleLogin = async () => {
-
-    const data = await axios.post(`http://${IP}/appuser-login`,{
+    const data = await axios.post(`http://${IP}/appuser-login`, {
       email,
-      password
+      password,
     });
-    if(data.status == 201){
+    if (data.status == 201) {
       setMessage(data?.data?.message + " !");
-    }else{
-      await AsyncStorage.setItem("userDetails",JSON.stringify(data?.data));
+    } else {
+      await AsyncStorage.setItem("userDetails", JSON.stringify(data?.data));
       navigation.setParams({ userDetails: data?.data });
       navigation.navigate("Drawer");
     }
-
-  }
+  };
 
   return (
     <View className="flex-1 gap-4 justify-center items-center bg-gray-100">
@@ -46,7 +44,7 @@ const LoginScreen = ({navigation}) => {
           value={email}
           onChangeText={(text) => {
             setEmail(text);
-            setMessage(""); 
+            setMessage("");
           }}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -57,11 +55,20 @@ const LoginScreen = ({navigation}) => {
           value={password}
           onChangeText={(text) => {
             setPassword(text);
-            setMessage(""); 
+            setMessage("");
           }}
           secureTextEntry={true}
         />
         <Text className="mb-2 text-red-500">{message}</Text>
+        <View className="flex-row items-center justify-start mb-2">
+          <Text className="text-slate-500 text-lg">Do not have Account?</Text>
+          <Text
+            className="text-blue-500 text-lg ml-2"
+            onPress={() => navigation.navigate("Registration")}
+          >
+            Sign Up
+          </Text>
+        </View>
         <TouchableOpacity
           className="bg-blue-500 p-3 rounded-lg items-center"
           onPress={handleLogin}

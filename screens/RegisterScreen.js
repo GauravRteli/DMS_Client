@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { IP } from '@env';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { IP } from "@env";
 import axios from "axios";
 import Skills from "../components/Skills";
+import RadioButton from "../components/RadioButton";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { validateEmail } from "../utils/validations";
 import { validateName } from "../utils/validations";
@@ -37,6 +38,12 @@ const RegistrationScreen = ({ navigation }) => {
     "December",
   ];
 
+  const [selectedValue, setSelectedValue] = useState("Male");
+
+  const handleSelect = (value) => {
+    setSelectedValue(value);
+  };
+
   const removeSkill = (skillName) => {
     let i = talent.skills.indexOf(skillName);
     if (i != -1) {
@@ -56,6 +63,16 @@ const RegistrationScreen = ({ navigation }) => {
       alert("Enter a Skill !");
     }
   };
+  const resetForm = () => {
+    setName("");
+    setDate("");
+    setTalent({ skills: new Array() });
+    setPassword("");
+    setConfirmPassword("");
+    setEmail("");
+    setPhoneNo("");
+    setSkillField("");
+  }
 
   const handleRegister = async () => {
     if (
@@ -66,24 +83,25 @@ const RegistrationScreen = ({ navigation }) => {
     ) {
       if (password == confirmPassword) {
         const skillsarray = talent.skills;
-        try{
+        try {
           const data = await axios.post(`http://${IP}/appuserregistration`, {
             name: name,
+            sex:selectedValue,
             email: email,
             phoneNo: phoneNo,
             dateOfBirth: date,
             skills: skillsarray,
             password: password,
           });
-          if(data.status == 200){
-            navigation.navigate('Login');
-          }else{
+          if (data.status == 200) {
+            resetForm();
+            navigation.navigate("Login");
+          } else {
             alert(data.data.message);
           }
-        }catch(err){
+        } catch (err) {
           alert(err);
         }
-
       } else {
         alert("password and confirmpassword are not matching");
       }
@@ -125,6 +143,20 @@ const RegistrationScreen = ({ navigation }) => {
         ) : (
           <></>
         )}
+        <View className="flex flex-row justify-start mb-4">
+          <RadioButton
+            value="Male"
+            label="Male"
+            selectedValue={selectedValue}
+            onSelect={handleSelect}
+          />
+          <RadioButton
+            value="Female"
+            label="Female"
+            selectedValue={selectedValue}
+            onSelect={handleSelect}
+          />
+        </View>
         <TextInput
           className={`bg-white p-3 rounded-lg ${
             isValidEmail ? "border-gray-300 mb-4" : "bg-red-100"
@@ -259,7 +291,6 @@ const RegistrationScreen = ({ navigation }) => {
           onChangeText={(text) => setConfirmPassword(text)}
           value={confirmPassword}
         />
-
         <TouchableOpacity
           className="bg-blue-500 py-3 rounded-md"
           onPress={handleRegister}

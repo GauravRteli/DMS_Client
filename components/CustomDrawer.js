@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
  
 
-import UserImage from "../assets/user.png";
+import UserMaleImage from "../assets/user.png";
+import UserFemaleImage from "../assets/userfemale.jpg";
 
 import { Entypo } from "@expo/vector-icons";
 import {
@@ -45,8 +46,9 @@ const CustomDrawer = (props) => {
     <View className="flex-1">
       <View className="flex-column h-1/5 justify-center items-center mt-10">
         <Image
-          source={UserImage}
-          style={{ height: 100, width: 100, marginBottom: 10 }}
+          className="rounded-full"
+          source={user?.sex == "Male" ? UserMaleImage : UserFemaleImage }
+          style={{ height: 120, width: 120, marginBottom: 5 }}
         />
         <View>
           <Text className="text-lg">{user ? user.name : "Unknown User"}</Text>
