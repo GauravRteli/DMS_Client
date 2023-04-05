@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, RefreshControl } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { IP } from "@env";
 import axios from "axios";
 
 import JobCard from "../components/JobCard";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getIP } from "../utils/getIp";
 
 const JobsAppliedScreen = ({ navigation }) => {
   const [appliedJobs, setAppliedJobs] = useState([]);
@@ -16,9 +16,9 @@ const JobsAppliedScreen = ({ navigation }) => {
   const getJobs = async () => {
     setRefreshing(true);
     let value = JSON.parse(await AsyncStorage.getItem("userDetails"));
-
+    const IP = await getIP();
     if (value != null) {
-      const data = await axios.post(`http://${IP}/get-appuser`, {
+      const data = await axios.post(`http://${IP}:5000/get-appuser`, {
         userid: value._id,
       });
 

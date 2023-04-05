@@ -28,8 +28,7 @@ function MyTabs(props) {
           options={{
             tabBarIcon: ({ size, color, focused }) => {
               if (focused) {
-                return <Entypo name="home" size={24} color="black
-                " />;
+                return <Entypo name="home" size={24} color="black" />;
               } else {
                 return <Entypo name="home" size={24} color="grey" />;
               }

@@ -22,7 +22,6 @@ const JobListing = ({ jobData, salaryReq, navigation, from, status }) => {
           flag = true;
         }
       });
-      console.log(status);
       navigation.navigate("JobDetails", {
         jobData,salaryReq,applied: flag,from,status
       })
@@ -51,7 +50,7 @@ const JobListing = ({ jobData, salaryReq, navigation, from, status }) => {
         <Text className="ml-3 mt-1">{jobData.requirements}</Text>
       </View>
       <TouchableOpacity
-        className="px-3 py-1 bg-blue-500 rounded-md"
+        className="px-10 py-1 bg-blue-500 self-end rounded-md"
         onPress={() => CheckUser()}
       >
         <Text className="text-white text-center p-2 font-bold">View</Text>

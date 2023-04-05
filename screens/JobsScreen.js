@@ -6,21 +6,17 @@ import { IP } from "@env";
 import axios from "axios";
 
 import JobCard from "../components/JobCard";
+import { getIP } from "../utils/getIp";
 
 const JobsScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [jobs, setJobs] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
   const getJobs = async () => {
     setRefreshing(true);
-    const data = await axios.get(`http://${IP}/get-jobs`);
+    const IP = await getIP();
+    const data = await axios.get(`http://${IP}:5000/get-jobs`);
     if (data.status == 200) {
       console.log("Successfully Got data");
       setJobs(data?.data);

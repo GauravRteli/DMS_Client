@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { IP } from "@env";
 import axios from "axios";
 import Skills from "../components/Skills";
 import RadioButton from "../components/RadioButton";
@@ -17,6 +16,7 @@ import { validateName } from "../utils/validations";
 import { validatePhoneNo } from "../utils/validations";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getIP } from "../utils/getIp";
 
 const EditProfile = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -96,7 +96,8 @@ const EditProfile = ({ navigation }) => {
       const skillsarray = talent.skills;
       console.log(bio);
       try {
-        const data = await axios.post(`http://${IP}/edit-appuser`, {
+        const IP = await getIP();
+        const data = await axios.post(`http://${IP}:5000/edit-appuser`, {
             workerId: workerId,
           name: name,
           sex: selectedValue,

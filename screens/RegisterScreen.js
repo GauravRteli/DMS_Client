@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { IP } from "@env";
 import axios from "axios";
 import Skills from "../components/Skills";
 import RadioButton from "../components/RadioButton";
@@ -15,6 +14,7 @@ import { validateEmail } from "../utils/validations";
 import { validateName } from "../utils/validations";
 import { validatePhoneNo } from "../utils/validations";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { getIP } from "../utils/getIp";
 
 const RegistrationScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -89,8 +89,9 @@ const RegistrationScreen = ({ navigation }) => {
     ) {
       if (password == confirmPassword) {
         const skillsarray = talent.skills;
+        const IP = await getIP();
         try {
-          const data = await axios.post(`http://${IP}/appuserregistration`, {
+          const data = await axios.post(`http://${IP}:5000/appuserregistration`, {
             name: name,
             sex: selectedValue,
             email: email,

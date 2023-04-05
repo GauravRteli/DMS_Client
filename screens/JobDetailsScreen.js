@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { IP } from '@env';
+// import { IP } from '@env';
+import { getIP } from "../utils/getIp";
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,10 +33,10 @@ const JobDetails = ({ route, navigation }) => {
       // if (flag) {
       //   alert("Already Applied into the job");
       // } else {
-        console.log(IP);
+        const IP = await getIP();
         try{
           const data = await axios.post(
-            `http://${IP}/user-jobapplication`,
+            `http://${IP}:5000/user-jobapplication`,
             {
               user: JSON.parse(value),
               job_id: jobData._id,

@@ -9,6 +9,7 @@ import ContactUs from "../screens/ContactUs";
 import Home from "../screens/Home";
 import JobDetails from "../screens/JobDetailsScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import OnBoardingScreen from "../screens/OnBoardingScreen";
 
 import DrawerNavigator from "./DrawerNavigator";
 
@@ -35,7 +36,7 @@ export default AppNavigator = () => {
       initialRouteName="Navbar"
       screenOptions={{ headerShown: false }}
     >
-      {/* <Stack.Screen name="Onboarding" component={OnBoardingScreen} /> */}
+      <Stack.Screen name="Onboarding" component={OnBoardingScreen} />
       <Stack.Screen name="Drawer" component={DrawerNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={LoginScreen} />
